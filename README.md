@@ -4,5 +4,8 @@ Framework used to deploy virtual networks featuring NFV, SDN and traditional rou
 
 ## How to run
 
-### Linux : make kathara
+### Linux : `make kathara`
 
+### Docker image location
+
+https://hub.docker.com/r/maissacrement/kathara
