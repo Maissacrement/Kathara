@@ -1,0 +1,22 @@
+all:
+  hosts:
+    machine0:
+      ipv4:
+        addr: 10.8.0.0
+        mask: 24
+        net: 
+          Hub0:
+            CIDR: 10.8.0.1/30
+            mode: gateway
+          
+    machine1:
+      ipv4:
+        addr: 10.9.0.0
+        mask: 24
+        net: ['Private', 'Hub0']
+      loop: ['Private', 'Hub0']
+    machine2:
+      ipv4:
+        addr: 10.10.0.0
+        mask: 24
+        net: ['DNS', 'Hub0']

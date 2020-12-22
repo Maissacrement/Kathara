@@ -1,0 +1,26 @@
+#!/usr/bin/nodejs
+
+export class Machine {
+  constructor(name,ip,mask) {
+    this.name = name
+    this.ip = ip
+    this.mask = mask
+  }
+}
+
+export class Machines {
+  constructor() {
+    this.all = []
+  }
+
+  addMachine(name,ip,mask) {
+    console.log(name)
+  }
+
+  stringToMachine(str) {
+    if(!str) throw new Error('Error')
+  }
+}
+
+//console.log(new Machine("pc1", "10.10.10.10", "24")) 
+
