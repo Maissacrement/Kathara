@@ -31,4 +31,4 @@ jobs:
       run: cd ./labscript && yarn
     - run: whereis node
     - run: ls /usr/bin
-    - run: chmod +x ./run && ./run
+    - run: chmod +x ./labscript/run && ./labscript/run
