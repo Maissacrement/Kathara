@@ -1,2 +1,0 @@
-ifconfig eth1 10.9.0.0/24 up
-ifconfig eth0 10.9.0.0/24 up
