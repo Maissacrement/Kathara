@@ -27,6 +27,8 @@ jobs:
     #- run: npm ci
     #- run: npm run build --if-present
     #- run: npm test
+    - name: package installation
+      run: cd ./labscript && yarn
     - run: whereis node
     - run: ls /usr/bin
-    - run: chmod +x ./labscript/run && ./labscript/run
+    - run: chmod +x ./run && ./run
