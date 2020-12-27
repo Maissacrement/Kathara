@@ -29,6 +29,7 @@ jobs:
     #- run: npm test
     - name: package installation
       run: cd ./labscript && yarn
-    - run: whereis node
-    - run: ls /usr/bin
-    - run: chmod +x ./labscript/run && ./labscript/run
+    - name: execute package
+      run: chmod +x ./labscript/run && ./labscript/run
+    - name: watch recusively current root directory
+      run: ls -R .
