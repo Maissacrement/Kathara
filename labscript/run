@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/bin/sh node
 const YamlWrapper = require('./yaml');
 const yaml = new YamlWrapper('./conf.yml')
 const rmdir = require('rmdir');
