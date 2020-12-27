@@ -1,0 +1,23 @@
+all:
+  hosts:
+    machine0:
+      ipv4:
+        addr: { item.domain.ip }
+        mask: 24
+        net: { item.name }
+        loop:
+          - { name: 'Hub0', domain: { ip: '10.8.0.0' } }
+          - { name: 'HubS1', domain: { ip: '10.9.0.0' } }
+    machine1:
+      ipv4:
+        addr: 10.9.0.0
+        mask: 24
+        net: { item.name }
+        loop:
+          - { name: 'Hub0' }
+          - { name: 'HubT1' }
+    machine2:
+      ipv4:
+        addr: 10.10.0.0
+        mask: 24
+        net: 'DNS'

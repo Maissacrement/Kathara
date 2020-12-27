@@ -1,0 +1,108 @@
+#!/usr/bin/node
+const YamlWrapper = require('./yaml');
+const yaml = new YamlWrapper('./conf.yml')
+const rmdir = require('rmdir');
+const fs = require("fs")
+const { exec } = require('child_process')
+
+const labPathLocation = process.cwd();
+const projectName = 'test';
+const projectLocation = `${labPathLocation}/${projectName}`
+
+const cmdLists = [];
+const lab = new Set([]);
+
+/*
+  Inet: { <name>: { CIDR: string, mode: 'normal' | 'gateway' } }
+  IMachine: { ipv4: { addr: string, mask: number, net: Inet[] } }
+  ICommand: { upInterface: String, setBlockInterface: String }
+*/
+
+// I/O function
+
+const createProjectFolder = (folder_path, cb) => {
+  [`rm -rvf ${projectLocation}`,`mkdir -p ${folder_path}`, `chmod -R 777 ${folder_path}`]
+  .forEach((cmd, i, arr) => exec(cmd, (err, stdout, stderr) => {
+    if(err) throw new Error(err)
+    if(stderr) throw new Error(stderr)
+    if(i === arr.length - 1) cb()
+  }))
+
+}
+
+const createFile = (file_name, message, mode) => {
+  const wMode = mode ? fs.writeFile : fs.appendFile;
+  createProjectFolder(projectLocation, () =>
+    fs.appendFile(`${projectLocation}/${file_name}`, `${message}\n`, { encode: 'utf-8', flag: 'a+' },(err) => {
+      if(err) throw new Error(err)
+    })
+  )
+}
+
+const rm = (folder, cb) =>
+  rmdir(`${labPathLocation}/${folder}`, function (err, dirs, files) {
+    console.log(dirs);
+    console.log(files);
+    console.log('all files are removed');
+    cb()
+  })
+
+/*
+  definition: Labs is binded with lab.conf, it's a list of kathara machine
+  @params:
+    - machine: IMachine
+    - machineName: String
+  return Set<'machineName[ethInterface]=colisionDomaine'>
+*/
+const labs = (machine, machineName) => lab.add(machine['net'].map((domaine,i) =>{
+    createFile('lab.conf', `${machineName}[${i}]=${domaine}`);
+    return `${machineName}[${i}]=${domaine}`;
+}))
+
+/*
+  @parmas:
+    - cmdLists: ICommand[]
+    - machineName: String
+    - ip: String
+    - mask: number
+  void function => apply a command as Array Index
+*/
+const pushCommand = (cmdLists, machineName, cmdStr) => {
+  Object.keys(cmdLists).forEach(
+    key => createFile(`${machineName}.startup`, cmdStr)
+  )
+}
+
+// Main
+(() => {
+    const data = yaml.loopToObject()
+    const command = {
+      lab: [], startup: []
+    }
+    // Yaml sub hosts field
+    Object.keys(data)
+      .forEach(machineName => {
+          // Yaml interfaces config key
+          const interfaces = data[machineName]
+          Object.keys(interfaces)
+            .map(key => interfaces[key][0] ? interfaces[key] : [ interfaces[key] ])
+            .forEach((configs,i) => {
+              if(!configs[0]) throw new Error('Please define loop element')
+              const conf = (index) =>  Object.keys(configs[index])
+                .filter(x => x !== 'net')
+                .reduce((key,acc) => `${configs[index][key]}/${configs[index][acc]}`)
+
+              configs.forEach((x,ix) => {
+                command['lab'].push(`${machineName}[${ix}]=${configs[ix]['net']}`)
+                command['startup'].push(`ifconfig eth${ix} ${conf(ix)} up`)
+
+                createFile(`${machineName}.startup`, `ifconfig eth${ix} ${conf(ix)} up`)
+              })
+            })
+      })
+
+    command['lab'].forEach((command,i) => {
+      createFile('lab.conf', command)
+    })
+    //console.log(JSON.stringify(command))
+})()
