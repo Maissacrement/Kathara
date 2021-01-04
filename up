@@ -1,0 +1,9 @@
+#!/usr/bin/nohup python
+import time
+import os
+
+def runComposer():
+    time.sleep(10)
+    os.system("docker-compose -f KATHARA.docker-compose.yml up")
+
+runComposer()

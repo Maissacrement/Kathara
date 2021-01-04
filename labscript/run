@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 /*
     This file is part of run.
 
@@ -37,8 +37,8 @@ const lab = new Set([]);
 
 // I/O function
 
-const createProjectFolder = (folder_path, cb) => {
-  [`rm -rvf ${projectLocation}`,`mkdir -p ${folder_path}`, `chmod -R 777 ${folder_path}`]
+const createProjectFolder = (cb, folder_path=projectLocation) => {
+  [`mkdir -p ${folder_path}`, `rm -rvf ${folder_path}/*`, `chmod -R 777 ${folder_path}`]
   .forEach((cmd, i, arr) => exec(cmd, (err, stdout, stderr) => {
     if(err) throw new Error(err)
     if(stderr) throw new Error(stderr)
@@ -49,7 +49,7 @@ const createProjectFolder = (folder_path, cb) => {
 
 const createFile = (file_name, message, mode) => {
   const wMode = mode ? fs.writeFile : fs.appendFile;
-  createProjectFolder(projectLocation, () =>
+  createProjectFolder(() =>
     fs.appendFile(`${projectLocation}/${file_name}`, `${message}\n`, { encode: 'utf-8', flag: 'a+' },(err) => {
       if(err) throw new Error(err)
     })
