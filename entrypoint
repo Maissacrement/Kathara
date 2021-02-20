@@ -1,0 +1,9 @@
+#!/bin/sh
+# Use kathara out ok the cluster
+# dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2376 --tlsverify --tlscacert /certs/server/ca.pem --tlscert /certs/server/cert.pem --tlskey /certs/server/key.pem
+# CLuster context
+# apk add xtables-addons
+# iptables -t nat -A INPUT
+sleep 10
+/opt/kathara/src/kathara.py lstart
+tail -f /dev/null

@@ -6,9 +6,11 @@ REPOSITORY=docker.io/maissacrement
 build:
 	@${DOCKER} build -t ${NAME} .
 
-run:
-	@${DOCKER} run -it -d --name ${NAME} --rm --privileged -e DISPLAY=$(DISPLAY) \
-	  -v "/tmp/.X11-unix/:/tmp/.X11-unix/" ${NAME}
+run: build
+	@${DOCKER} run -it --name ${NAME} --rm --privileged -e DISPLAY=$(DISPLAY) \
+	  -v "/tmp/.X11-unix/:/tmp/.X11-unix/" \
+	  -v "/var/run/docker.sock:/var/run/docker.sock" \
+	${NAME}
 
 shell:
 	@${DOCKER} exec -it ${NAME} chown -R root:dockremap /var/run/docker.sock

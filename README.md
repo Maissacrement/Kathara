@@ -19,3 +19,7 @@ https://hub.docker.com/r/maissacrement/kathara
 
 ## kathara
 - `kathara lstart --noterminals` : start conf from a lab project
+
+## Issue
+
+1 - Kathara network error log but container and networking as working well

@@ -1,7 +1,36 @@
 version: '3.8'
 services:
   dockerd:
+    restart: always
+    image: maissacrement/subnetting
+    privileged: true
+    networks: 
+      - cluster
+    volumes:
+      - "Data:/var"
+  kathara:
     build:
       context: .
-      dockerfile: ./Dockerfile
-    privileged: true
+      dockerfile: Dockerfile
+    networks: 
+      - cluster
+    depends_on: 
+      - dockerd
+    volumes_from:
+      - dockerd
+    environment:
+      - DISPLAY=$DISPLAY
+    volumes:
+      - "/tmp/.X11-unix/:/tmp/.X11-unix/"
+    #  - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes: 
+  Data:
+
+networks:
+  cluster:
+    ipam:
+      config:
+        - subnet: 172.56.20.0/24
+          gateway: 172.56.20.1
+
