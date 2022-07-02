@@ -36,7 +36,7 @@ jobs:
       run: ls -R .
     - name: push
       working-directory: ./labscript
-      run: echo -e "maissacrement\n{{secrets.PASS_GIT}}" | npm login --registry=https://npm.pkg.github.com
+      run: echo -e "maissacrement\n$PASS_GIT" | npm login --registry=https://npm.pkg.github.com
     - name: FREEZE installation
       working-directory: ./labscript
       run: rm -fr node_modules && yarn install --frozen
