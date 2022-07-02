@@ -28,8 +28,15 @@ jobs:
     #- run: npm run build --if-present
     #- run: npm test
     - name: package installation
-      run: cd ./labscript && yarn
+      working-directory: ./labscript
+      run: yarn
     - name: execute package
       run: chmod +x ./labscript/run && ./labscript/run
     - name: watch recusively current root directory
       run: ls -R .
+    - name: package installation
+      working-directory: ./labscript
+      run: rm -fr node_modules && yarn install --frozen
+    - name: package installation
+      working-directory: ./labscript
+      run: npm publish
