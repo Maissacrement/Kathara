@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/Maissacrement/Kathara.git"
   },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
