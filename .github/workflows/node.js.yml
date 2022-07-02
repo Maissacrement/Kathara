@@ -24,6 +24,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ secret.PASS_GIT }}
+        registry: https://npm.pkg.github.com
     #- run: npm ci
     #- run: npm run build --if-present
     #- run: npm test
@@ -36,7 +40,7 @@ jobs:
       run: ls -R .
     - name: push
       working-directory: ./labscript
-      run: /bin/bash -c 'echo -e "maissacrement\n${{ env.PASS_GIT }}"' | npm login --scope=@Maissacrement --registry=https://npm.pkg.github.com
+      run: npm login
     - name: FREEZE installation
       working-directory: ./labscript
       run: rm -fr node_modules && yarn install --frozen
